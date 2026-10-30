@@ -1,6 +1,6 @@
 {
   "name": "taskflow",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "TaskFlow - task board app used for the Jenkins CI/CD and Terraform assignment",
   "main": "app/server.js",
   "scripts": {

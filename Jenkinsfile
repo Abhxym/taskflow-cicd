@@ -6,6 +6,7 @@ pipeline {
     agent any
 
     options {
+        skipDefaultCheckout(true)   // the Checkout stage does it once
         timestamps()
         ansiColor('xterm')
         disableConcurrentBuilds()
