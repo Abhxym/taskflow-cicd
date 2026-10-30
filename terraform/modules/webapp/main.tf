@@ -67,7 +67,7 @@ resource "docker_container" "app" {
   wait_timeout = 90
 
   dynamic "labels" {
-    for_each = merge(var.labels, { role = "app" })
+    for_each = merge(var.labels, var.container_labels, { role = "app" })
     content {
       label = labels.key
       value = labels.value
@@ -100,7 +100,7 @@ resource "docker_container" "lb" {
   }
 
   dynamic "labels" {
-    for_each = merge(var.labels, { role = "load-balancer" })
+    for_each = merge(var.labels, var.container_labels, { role = "load-balancer" })
     content {
       label = labels.key
       value = labels.value

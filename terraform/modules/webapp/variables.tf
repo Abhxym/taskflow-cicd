@@ -43,6 +43,12 @@ variable "labels" {
   default     = {}
 }
 
+variable "container_labels" {
+  description = "Extra labels for containers only (values may change on every deploy)"
+  type        = map(string)
+  default     = {}
+}
+
 variable "lb_image" {
   description = "Image used for the load balancer"
   type        = string
