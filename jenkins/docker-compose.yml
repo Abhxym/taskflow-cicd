@@ -1,0 +1,25 @@
+# Starts the Jenkins server:  docker compose -f jenkins/docker-compose.yml up -d --build
+services:
+  jenkins:
+    build: .
+    image: taskflow-jenkins:lts
+    container_name: jenkins
+    # root is needed to use the Docker socket of the host (lab setup only)
+    user: root
+    env_file: .env
+    ports:
+      - "8085:8080"
+    volumes:
+      - jenkins_home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks: [ci]
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: unless-stopped
+
+volumes:
+  jenkins_home:
+
+networks:
+  ci:
+    name: ci-net

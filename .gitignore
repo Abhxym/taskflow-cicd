@@ -1,0 +1,13 @@
+node_modules/
+data/
+test-results.xml
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+crash.log
+
+# Jenkins local secrets
+jenkins/.env

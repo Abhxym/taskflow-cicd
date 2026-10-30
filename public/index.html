@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TaskFlow - Website Revamp</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="logo">
+      <img src="favicon.svg" alt="" width="24" height="24">
+      <span>TaskFlow</span>
+    </div>
+
+    <div class="side-group">
+      <div class="side-title">Workspace</div>
+      <a class="side-item active" href="#"><svg viewBox="0 0 20 20"><path d="M3 3h6v6H3zM11 3h6v6h-6zM3 11h6v6H3zM11 11h6v6h-6z"/></svg>Board</a>
+      <a class="side-item" href="#" id="navMine"><svg viewBox="0 0 20 20"><path d="M10 10a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm-7 8a7 7 0 0 1 14 0z"/></svg>My tasks</a>
+    </div>
+
+    <div class="side-group">
+      <div class="side-title">Projects</div>
+      <a class="side-item active-soft" href="#"><i class="dot" style="background:#6366f1"></i>Website Revamp</a>
+      <a class="side-item" href="#"><i class="dot" style="background:#f59e0b"></i>Mobile App</a>
+      <a class="side-item" href="#"><i class="dot" style="background:#10b981"></i>Internal Tools</a>
+    </div>
+
+    <div class="side-group">
+      <div class="side-title">Team</div>
+      <div class="team" id="team"></div>
+    </div>
+
+    <div class="build-card" id="buildCard">
+      <div class="build-row"><span>Environment</span><b id="envName">-</b></div>
+      <div class="build-row"><span>Version</span><b id="appVersion">-</b></div>
+      <div class="build-row"><span>Build</span><b id="buildNo">-</b></div>
+      <div class="build-row"><span>Commit</span><b id="commitId">-</b></div>
+      <div class="build-row"><span>Instance</span><b id="instanceId">-</b></div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div>
+        <div class="crumbs">Projects / <b>Website Revamp</b></div>
+        <h1>Sprint board</h1>
+      </div>
+      <div class="top-actions">
+        <div class="search">
+          <svg viewBox="0 0 20 20"><path d="M8.5 3a5.5 5.5 0 0 1 4.4 8.8l3.7 3.7-1.2 1.2-3.7-3.7A5.5 5.5 0 1 1 8.5 3zm0 1.7a3.8 3.8 0 1 0 0 7.6 3.8 3.8 0 0 0 0-7.6z"/></svg>
+          <input id="search" type="search" placeholder="Search tasks">
+        </div>
+        <select id="filterTag" aria-label="Filter by tag"><option value="">All tags</option></select>
+        <button class="btn primary" id="newBtn">
+          <svg viewBox="0 0 20 20"><path d="M9 4h2v5h5v2h-5v5H9v-5H4V9h5z"/></svg>New task
+        </button>
+      </div>
+    </header>
+
+    <section class="stats">
+      <div class="stat"><span>Total tasks</span><b id="sTotal">0</b></div>
+      <div class="stat"><span>In progress</span><b id="sProgress">0</b></div>
+      <div class="stat"><span>In review</span><b id="sReview">0</b></div>
+      <div class="stat"><span>Completed</span><b id="sDone">0</b></div>
+      <div class="stat wide">
+        <div class="stat-head"><span>Sprint progress</span><b id="sPct">0%</b></div>
+        <div class="progress"><div id="sBar"></div></div>
+      </div>
+    </section>
+
+    <section class="board" id="board">
+      <div class="column" data-status="backlog">
+        <div class="col-head"><i class="col-dot" style="background:#9ca3af"></i>Backlog<span class="count"></span></div>
+        <div class="cards"></div>
+      </div>
+      <div class="column" data-status="in_progress">
+        <div class="col-head"><i class="col-dot" style="background:#3b82f6"></i>In progress<span class="count"></span></div>
+        <div class="cards"></div>
+      </div>
+      <div class="column" data-status="review">
+        <div class="col-head"><i class="col-dot" style="background:#f59e0b"></i>Review<span class="count"></span></div>
+        <div class="cards"></div>
+      </div>
+      <div class="column" data-status="done">
+        <div class="col-head"><i class="col-dot" style="background:#10b981"></i>Done<span class="count"></span></div>
+        <div class="cards"></div>
+      </div>
+    </section>
+  </main>
+
+  <dialog id="taskDialog">
+    <form method="dialog" id="taskForm">
+      <h2 id="dialogTitle">New task</h2>
+      <label>Title<input name="title" required maxlength="120" placeholder="What needs to be done?"></label>
+      <label>Description<textarea name="description" rows="3" maxlength="500"></textarea></label>
+      <div class="form-row">
+        <label>Status
+          <select name="status">
+            <option value="backlog">Backlog</option>
+            <option value="in_progress">In progress</option>
+            <option value="review">Review</option>
+            <option value="done">Done</option>
+          </select>
+        </label>
+        <label>Priority
+          <select name="priority">
+            <option value="low">Low</option>
+            <option value="medium" selected>Medium</option>
+            <option value="high">High</option>
+          </select>
+        </label>
+      </div>
+      <div class="form-row">
+        <label>Tag<input name="tag" maxlength="60" placeholder="e.g. Frontend"></label>
+        <label>Due date<input name="due" type="date"></label>
+      </div>
+      <label>Assignee<input name="assignee" maxlength="60" placeholder="Name"></label>
+      <p class="form-error" id="formError"></p>
+      <div class="dialog-actions">
+        <button type="button" class="btn danger-text" id="deleteBtn">Delete</button>
+        <span class="spacer"></span>
+        <button type="button" class="btn" id="cancelBtn">Cancel</button>
+        <button type="submit" class="btn primary" id="saveBtn">Save</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div class="toast" id="toast"></div>
+  <script src="app.js"></script>
+</body>
+</html>

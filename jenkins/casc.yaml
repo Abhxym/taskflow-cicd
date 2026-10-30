@@ -1,0 +1,51 @@
+# Jenkins Configuration as Code
+# Values like ${JENKINS_ADMIN_PASSWORD} come from jenkins/.env (not committed).
+jenkins:
+  systemMessage: "TaskFlow CI/CD server - builds, tests and deploys TaskFlow with Docker and Terraform."
+  numExecutors: 2
+  mode: NORMAL
+  securityRealm:
+    local:
+      allowsSignup: false
+      users:
+        - id: "${JENKINS_ADMIN_USER}"
+          name: "Abhay Maurya"
+          password: "${JENKINS_ADMIN_PASSWORD}"
+  authorizationStrategy:
+    loggedInUsersCanDoAnything:
+      allowAnonymousRead: true
+
+unclassified:
+  location:
+    url: "http://localhost:8085/"
+
+jobs:
+  - script: |
+      pipelineJob('taskflow-pipeline') {
+        displayName('TaskFlow CI/CD Pipeline')
+        description('Checkout from GitHub, unit tests, Docker build, container tests, Terraform deploy to staging, approval, deploy to production.')
+        properties {
+          githubProjectUrl('${TASKFLOW_REPO_URL}')
+          pipelineTriggers {
+            triggers {
+              pollSCM {
+                scmpoll_spec('H/2 * * * *')
+              }
+            }
+          }
+        }
+        definition {
+          cpsScm {
+            scm {
+              git {
+                remote {
+                  url('${TASKFLOW_REPO_URL}')
+                }
+                branch('*/main')
+              }
+            }
+            scriptPath('Jenkinsfile')
+            lightweight(true)
+          }
+        }
+      }
