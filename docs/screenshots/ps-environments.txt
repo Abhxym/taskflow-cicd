@@ -1,0 +1,26 @@
+PS C:\Users\Admin\Documents\Cloud-MDM\taskflow-cicd> docker ps --filter "label=project=taskflow" --format "table {{.Names}}\t{{.Image}}\t{{.Status}}\t{{.Ports}}"
+NAMES                       IMAGE          STATUS                        PORTS
+taskflow-production-lb      65645c7bb6a0   Up 59 seconds                 0.0.0.0:8082->80/tcp
+taskflow-production-app-2   bba93f962fc7   Up About a minute (healthy)   3000/tcp
+taskflow-production-app-3   bba93f962fc7   Up About a minute (healthy)   3000/tcp
+taskflow-production-app-1   bba93f962fc7   Up About a minute (healthy)   3000/tcp
+taskflow-staging-lb         65645c7bb6a0   Up About a minute             0.0.0.0:8081->80/tcp
+taskflow-staging-app-1      bba93f962fc7   Up About a minute (healthy)   3000/tcp
+taskflow-staging-app-2      bba93f962fc7   Up About a minute (healthy)   3000/tcp
+
+PS C:\Users\Admin\Documents\Cloud-MDM\taskflow-cicd> docker network ls --filter "label=managed_by=terraform"
+NETWORK ID     NAME                      DRIVER    SCOPE
+df4dd0a501a7   taskflow-production-net   bridge    local
+9543d9ad58da   taskflow-staging-net      bridge    local
+
+PS C:\Users\Admin\Documents\Cloud-MDM\taskflow-cicd> docker volume ls --filter "label=managed_by=terraform"
+DRIVER    VOLUME NAME
+local     taskflow-production-data
+local     taskflow-staging-data
+
+PS C:\Users\Admin\Documents\Cloud-MDM\taskflow-cicd> curl.exe -s http://localhost:8081/api/info
+{"app":"TaskFlow","version":"1.2.0","build":"5","commit":"36b43fc","environment":"staging","instance":"493fa3197796","startedAt":"2026-10-30T08:18:18.724Z"}
+
+PS C:\Users\Admin\Documents\Cloud-MDM\taskflow-cicd> curl.exe -s http://localhost:8082/api/info
+{"app":"TaskFlow","version":"1.2.0","build":"5","commit":"36b43fc","environment":"production","instance":"3564ade6f0cf","startedAt":"2026-10-30T08:18:55.002Z"}
+

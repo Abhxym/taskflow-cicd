@@ -5,7 +5,7 @@ Name: Abhay Maurya | PRN: 202301040187 | Course: CND (MDM)
 
 TaskFlow is a task board web app (Node.js, no external packages). A Jenkins pipeline tests it, builds a Docker image and deploys it with Terraform to a staging and a production environment.
 
-![TaskFlow](docs/screenshots/app-production.png)
+![TaskFlow](docs/screenshots/app-production-final.png)
 
 ## Pipeline
 
@@ -73,3 +73,8 @@ API: `GET /api/health`, `GET /api/info`, `GET|POST /api/tasks`, `PATCH|DELETE /a
 | http://localhost:8081 | staging |
 | http://localhost:8082 | production |
 | http://localhost:8083 | dev (manual Terraform) |
+
+## Report and evidence
+
+- Report: [report/Jenkins_Terraform_CICD_Report.pdf](report/Jenkins_Terraform_CICD_Report.pdf)
+- Screenshots and raw command output: `docs/screenshots/`
