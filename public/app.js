@@ -194,6 +194,13 @@
     await load();
   });
 
+  // keyboard shortcuts: N = new task, / = search
+  document.addEventListener('keydown', (e) => {
+    if (dlg.open || ['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement.tagName)) return;
+    if (e.key === 'n' || e.key === 'N') { e.preventDefault(); openDialog(); }
+    if (e.key === '/') { e.preventDefault(); $('#search').focus(); }
+  });
+
   $('#search').addEventListener('input', render);
   $('#filterTag').addEventListener('change', render);
   $('#navMine').addEventListener('click', (e) => {

@@ -163,3 +163,5 @@ form input:focus, form textarea:focus, form select:focus { outline: 2px solid va
   .board { grid-template-columns: 1fr; }
   .search input { width: 120px; }
 }
+
+kbd { font: 11px ui-monospace, Consolas, monospace; background: rgba(255,255,255,.2); border-radius: 3px; padding: 0 4px; margin-left: 2px; }

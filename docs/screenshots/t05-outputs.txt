@@ -1,0 +1,26 @@
+PS C:\Users\Admin\Documents\Cloud-MDM\taskflow-cicd\terraform> terraform output
+app_containers = [
+  "taskflow-dev-app-1",
+]
+app_url = "http://localhost:8083"
+data_volume = "taskflow-dev-data"
+deployed_image = "taskflow:latest"
+load_balancer = "taskflow-dev-lb"
+network = "taskflow-dev-net"
+
+PS C:\Users\Admin\Documents\Cloud-MDM\taskflow-cicd\terraform> terraform state list
+module.taskflow.data.docker_image.app
+module.taskflow.docker_container.app[0]
+module.taskflow.docker_container.lb
+module.taskflow.docker_image.nginx
+module.taskflow.docker_network.this
+module.taskflow.docker_volume.data
+
+PS C:\Users\Admin\Documents\Cloud-MDM\taskflow-cicd\terraform> docker ps --filter "label=environment=dev" --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
+NAMES                STATUS                    PORTS
+taskflow-dev-lb      Up 10 seconds             0.0.0.0:8083->80/tcp
+taskflow-dev-app-1   Up 16 seconds (healthy)   3000/tcp
+
+PS C:\Users\Admin\Documents\Cloud-MDM\taskflow-cicd\terraform> curl.exe -s http://localhost:8083/api/info
+{"app":"TaskFlow","version":"1.0.0","build":"manual","commit":"unknown","environment":"dev","instance":"34e8d017303f","startedAt":"2026-10-30T08:13:36.819Z"}
+

@@ -1,0 +1,6 @@
+PS C:\Users\Admin\Documents\Cloud-MDM\taskflow-cicd\terraform> terraform fmt -check -recursive; if ($?) { "fmt: all files formatted" }
+fmt: all files formatted
+
+PS C:\Users\Admin\Documents\Cloud-MDM\taskflow-cicd\terraform> terraform validate
+Success! The configuration is valid.
+

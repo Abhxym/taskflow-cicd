@@ -1,0 +1,25 @@
+PS C:\Users\Admin\Documents\Cloud-MDM\taskflow-cicd\terraform> terraform apply dev.tfplan
+module.taskflow.docker_image.nginx: Creating...
+module.taskflow.docker_volume.data: Creating...
+module.taskflow.docker_network.this: Creating...
+module.taskflow.docker_volume.data: Creation complete after 0s [id=taskflow-dev-data]
+module.taskflow.docker_image.nginx: Creation complete after 1s [id=sha256:65645c7bb6a0661892a8b03b89d0743208a18dd2f3f17a54ef4b76fb8e2f2a10nginx:1.27-alpine]
+module.taskflow.docker_network.this: Creation complete after 2s [id=15c4d86640fbe7576ba6cc9622cec8349c0fa05bd91abec8f5cfbf4bb72c75a0]
+module.taskflow.docker_container.app[0]: Creating...
+module.taskflow.docker_container.app[0]: Creation complete after 6s [id=34e8d017303f0dbabd393669c674be990dafd34e10136e76baf402cafd5becf8]
+module.taskflow.docker_container.lb: Creating...
+module.taskflow.docker_container.lb: Creation complete after 1s [id=6580a09923dcf943ccfdaf12613223e873991eaa2b358b24ddd04e27a433acfd]
+
+Apply complete! Resources: 5 added, 0 changed, 0 destroyed.
+
+Outputs:
+
+app_containers = [
+  "taskflow-dev-app-1",
+]
+app_url = "http://localhost:8083"
+data_volume = "taskflow-dev-data"
+deployed_image = "taskflow:latest"
+load_balancer = "taskflow-dev-lb"
+network = "taskflow-dev-net"
+

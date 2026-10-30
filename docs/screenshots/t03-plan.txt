@@ -1,0 +1,282 @@
+PS C:\Users\Admin\Documents\Cloud-MDM\taskflow-cicd\terraform> terraform plan -var-file="environments/dev.tfvars" -var docker_host="npipe:////./pipe/docker_engine" -out dev.tfplan
+module.taskflow.data.docker_image.app: Reading...
+module.taskflow.data.docker_image.app: Read complete after 0s [id=sha256:d1b456006961370fc52ab55328ae9fda7edd6e9b536e0d39c2c9728ef5a19061]
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # module.taskflow.docker_container.app[0] will be created
+  + resource "docker_container" "app" {
+      + attach                                      = false
+      + bridge                                      = (known after apply)
+      + command                                     = (known after apply)
+      + container_logs                              = (known after apply)
+      + container_read_refresh_timeout_milliseconds = 15000
+      + entrypoint                                  = (known after apply)
+      + env                                         = [
+          + "APP_VERSION=1.0.0",
+          + "BUILD_NUMBER=manual",
+          + "DEPLOY_ENV=dev",
+          + "GIT_COMMIT=unknown",
+          + "INSTANCE_NO=1",
+        ]
+      + exit_code                                   = (known after apply)
+      + hostname                                    = (known after apply)
+      + id                                          = (known after apply)
+      + image                                       = "sha256:d1b456006961370fc52ab55328ae9fda7edd6e9b536e0d39c2c9728ef5a19061"
+      + init                                        = (known after apply)
+      + ipc_mode                                    = (known after apply)
+      + log_driver                                  = (known after apply)
+      + logs                                        = false
+      + memory                                      = 128
+      + memory_reservation                          = 0
+      + must_run                                    = true
+      + name                                        = "taskflow-dev-app-1"
+      + network_data                                = (known after apply)
+      + network_mode                                = "bridge"
+      + read_only                                   = false
+      + remove_volumes                              = true
+      + restart                                     = "unless-stopped"
+      + rm                                          = false
+      + runtime                                     = (known after apply)
+      + security_opts                               = (known after apply)
+      + shm_size                                    = (known after apply)
+      + start                                       = true
+      + stdin_open                                  = false
+      + stop_signal                                 = (known after apply)
+      + stop_timeout                                = (known after apply)
+      + tty                                         = false
+      + wait                                        = true
+      + wait_timeout                                = 90
+
+      + healthcheck {
+          + interval       = "10s"
+          + retries        = 3
+          + start_interval = "0s"
+          + start_period   = "0s"
+          + test           = [
+              + "CMD",
+              + "wget",
+              + "-qO-",
+              + "http://127.0.0.1:3000/api/health",
+            ]
+          + timeout        = "3s"
+        }
+
+      + labels {
+          + label = "build"
+          + value = "manual"
+        }
+      + labels {
+          + label = "environment"
+          + value = "dev"
+        }
+      + labels {
+          + label = "managed_by"
+          + value = "terraform"
+        }
+      + labels {
+          + label = "project"
+          + value = "taskflow"
+        }
+      + labels {
+          + label = "role"
+          + value = "app"
+        }
+
+      + networks_advanced {
+          + aliases      = []
+          + name         = "taskflow-dev-net"
+            # (3 unchanged attributes hidden)
+        }
+
+      + volumes {
+          + container_path = "/data"
+          + volume_name    = "taskflow-dev-data"
+            # (2 unchanged attributes hidden)
+        }
+    }
+
+  # module.taskflow.docker_container.lb will be created
+  + resource "docker_container" "lb" {
+      + attach                                      = false
+      + bridge                                      = (known after apply)
+      + command                                     = (known after apply)
+      + container_logs                              = (known after apply)
+      + container_read_refresh_timeout_milliseconds = 15000
+      + entrypoint                                  = (known after apply)
+      + env                                         = (known after apply)
+      + exit_code                                   = (known after apply)
+      + hostname                                    = (known after apply)
+      + id                                          = (known after apply)
+      + image                                       = (known after apply)
+      + init                                        = (known after apply)
+      + ipc_mode                                    = (known after apply)
+      + log_driver                                  = (known after apply)
+      + logs                                        = false
+      + memory_reservation                          = 0
+      + must_run                                    = true
+      + name                                        = "taskflow-dev-lb"
+      + network_data                                = (known after apply)
+      + network_mode                                = "bridge"
+      + read_only                                   = false
+      + remove_volumes                              = true
+      + restart                                     = "unless-stopped"
+      + rm                                          = false
+      + runtime                                     = (known after apply)
+      + security_opts                               = (known after apply)
+      + shm_size                                    = (known after apply)
+      + start                                       = true
+      + stdin_open                                  = false
+      + stop_signal                                 = (known after apply)
+      + stop_timeout                                = (known after apply)
+      + tty                                         = false
+      + wait                                        = false
+      + wait_timeout                                = 60
+
+      + healthcheck (known after apply)
+
+      + labels {
+          + label = "build"
+          + value = "manual"
+        }
+      + labels {
+          + label = "environment"
+          + value = "dev"
+        }
+      + labels {
+          + label = "managed_by"
+          + value = "terraform"
+        }
+      + labels {
+          + label = "project"
+          + value = "taskflow"
+        }
+      + labels {
+          + label = "role"
+          + value = "load-balancer"
+        }
+
+      + networks_advanced {
+          + aliases      = []
+          + name         = "taskflow-dev-net"
+            # (3 unchanged attributes hidden)
+        }
+
+      + ports {
+          + external = 8083
+          + internal = 80
+          + ip       = "0.0.0.0"
+          + protocol = "tcp"
+        }
+
+      + upload {
+          + content        = <<-EOT
+                # Generated by Terraform for taskflow-dev
+                upstream app_backend {
+                    zone app_backend 64k;
+                    server taskflow-dev-app-1:3000 max_fails=3 fail_timeout=10s;
+                }
+                
+                server {
+                    listen 80;
+                    server_name _;
+                
+                    location / {
+                        proxy_pass http://app_backend;
+                        proxy_set_header Host $host;
+                        proxy_set_header X-Real-IP $remote_addr;
+                        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                        proxy_next_upstream error timeout http_502 http_503;
+                    }
+                
+                    location = /lb-health {
+                        default_type text/plain;
+                        return 200 "ok\n";
+                    }
+                }
+            EOT
+          + executable     = false
+          + file           = "/etc/nginx/conf.d/default.conf"
+            # (4 unchanged attributes hidden)
+        }
+    }
+
+  # module.taskflow.docker_image.nginx will be created
+  + resource "docker_image" "nginx" {
+      + id           = (known after apply)
+      + image_id     = (known after apply)
+      + keep_locally = true
+      + name         = "nginx:1.27-alpine"
+      + repo_digest  = (known after apply)
+    }
+
+  # module.taskflow.docker_network.this will be created
+  + resource "docker_network" "this" {
+      + driver      = "bridge"
+      + id          = (known after apply)
+      + internal    = (known after apply)
+      + ipam_driver = "default"
+      + name        = "taskflow-dev-net"
+      + options     = (known after apply)
+      + scope       = (known after apply)
+
+      + ipam_config (known after apply)
+
+      + labels {
+          + label = "environment"
+          + value = "dev"
+        }
+      + labels {
+          + label = "managed_by"
+          + value = "terraform"
+        }
+      + labels {
+          + label = "project"
+          + value = "taskflow"
+        }
+    }
+
+  # module.taskflow.docker_volume.data will be created
+  + resource "docker_volume" "data" {
+      + driver     = (known after apply)
+      + id         = (known after apply)
+      + mountpoint = (known after apply)
+      + name       = "taskflow-dev-data"
+
+      + labels {
+          + label = "environment"
+          + value = "dev"
+        }
+      + labels {
+          + label = "managed_by"
+          + value = "terraform"
+        }
+      + labels {
+          + label = "project"
+          + value = "taskflow"
+        }
+    }
+
+Plan: 5 to add, 0 to change, 0 to destroy.
+
+Changes to Outputs:
+  + app_containers = [
+      + "taskflow-dev-app-1",
+    ]
+  + app_url        = "http://localhost:8083"
+  + data_volume    = "taskflow-dev-data"
+  + deployed_image = "taskflow:latest"
+  + load_balancer  = "taskflow-dev-lb"
+  + network        = "taskflow-dev-net"
+
+─────────────────────────────────────────────────────────────────────────────
+
+Saved the plan to: dev.tfplan
+
+To perform exactly these actions, run the following command to apply:
+    terraform apply "dev.tfplan"
+
